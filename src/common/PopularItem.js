@@ -10,7 +10,9 @@ export default class PopularItem extends Component {
     super(props);
   }
   render() {
-    const {item} = this.props; //获取数据
+    const {projectModel} = this.props; //获取数据
+
+    const item = projectModel;
     if (!item || !item.owner) {
       return null;
     }
@@ -43,6 +45,7 @@ export default class PopularItem extends Component {
               <Text>{'Start:'}</Text>
               <Text>{item.stargazers_count}</Text>
             </View>
+            {favouriteButton}
           </View>
         </View>
       </TouchableOpacity>
@@ -52,7 +55,7 @@ export default class PopularItem extends Component {
 
 const styles = StyleSheet.create({
   cell_container: {
-    backgroundColor: 'white',
+    backgroundColor: '#ffe58f',
     padding: 10,
     marginLeft: 5,
     marginRight: 5,

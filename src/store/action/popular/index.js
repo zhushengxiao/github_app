@@ -148,7 +148,7 @@ import DataStore, {FLAG_STORAGE} from '../../../Dao/DataStore';
 //   };
 // }
 
-export function onLoadPopularData(storeName, url) {
+export function onLoadPopularData(storeName, url, pageSize) {
   return (dispatch) => {
     dispatch({type: Types.POPULAR_REFRESH, storeName: storeName});
     let dataStore = new DataStore();
@@ -157,11 +157,7 @@ export function onLoadPopularData(storeName, url) {
       .then((data) => {
         console.log('onLoadPopularData', data);
         // handleData(dispatch, storeName, data);
-        dispatch({
-          type: Types.POPOLAR_REFRESH_SUCCESS,
-          items: data && data.data && data.data.items,
-          storeName, //es7语法,相当于storeName:storeName
-        });
+        handleData(dispatch, storeName, data, pageSize);
       })
       .catch((error) => {
         dispatch({
@@ -173,10 +169,68 @@ export function onLoadPopularData(storeName, url) {
   };
 }
 
-function handleData(dispatch, storeName, data) {
+function handleData(dispatch, storeName, data, pageSize) {
+  let fixItems = [];
+  if (data && data.data && data.data.items) {
+    fixItems = data.data.items;
+  }
   dispatch({
-    type: Types.POPULAR_REFRESH_SUCCESS,
-    items: data && data.data && data.data.items,
+    type: Types.POPOLAR_REFRESH_SUCCESS,
+    items: fixItems,
+    projectModels:
+      pageSize > fixItems.length ? fixItems : fixItems.slice(0, pageSize), //第一次加载的数据
     storeName, //es7语法,相当于storeName:storeName
+    pageIndex: 1,
   });
+}
+
+/**
+ * 加载更多
+ * @param storeName
+ * @param pageIndex 第几页
+ * @param pageSize 每页展示条数
+ * @param dataArray 原始数据
+ * @param callBack 回调函数，可以通过回调函数来向调用页面通信：比如异常信息的展示，没有更多等待
+ * @param favoriteDao
+ * @returns {function(*)}
+ */
+
+export function onLoadMorePopular(
+  storeName,
+  pageIndex,
+  pageSize,
+  dataArray = [],
+  callBack
+) {
+  return (dispatch) => {
+    // console.log('pageIndex', pageIndex);
+    setTimeout(() => {
+      if ((pageIndex - 1) * pageSize >= dataArray.length) {
+        //已加载完全部数据
+        if (typeof callBack === 'function') {
+          callBack('no more popular data');
+        }
+        console.log('enter the fail moredata');
+        dispatch({
+          type: Types.POPOLAR_LOAD_MORE_FAIL,
+          error: 'no more',
+          storeName: storeName,
+          pageIndex: --pageIndex,
+        });
+      } else {
+        //本次和载入的最大数量
+        let max =
+          pageSize * pageIndex > dataArray.length
+            ? dataArray.length
+            : pageSize * pageIndex;
+        // console.log(pageIndex, max);
+        dispatch({
+          type: Types.POPOLAR_LOAD_MORE_SUCCESS,
+          storeName,
+          pageIndex,
+          projectModels: dataArray.slice(0, max),
+        });
+      }
+    }, 500);
+  };
 }

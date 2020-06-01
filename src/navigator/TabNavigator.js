@@ -117,7 +117,7 @@ class TabBarComponent extends Component {
     super(props);
     this.theme = {
       //定义一个主题属性
-      tintColor: props.theme, //设置颜色
+      tintColor: this.props.theme, //设置颜色
       updataTime: new Date().getTime(), //时间作为标志位
     };
   }
@@ -141,7 +141,7 @@ class TabBarComponent extends Component {
         // activeTintColor={this.theme.tintColor || this.props.activeTintColor}
         //redux传过来的参数
         activeTintColor={this.theme.tintColor || this.activeTintColor}
-        inactiveTintColor={'#95de64'}
+        inactiveTintColor={this.props.theme}
       />
     );
   }
