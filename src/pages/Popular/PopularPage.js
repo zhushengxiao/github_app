@@ -158,6 +158,7 @@ class PopularTab extends Component {
   _store() {
     const {popular} = this.props;
     let store = popular[this.storeName]; //动态获取state
+
     if (!store) {
       //在state树中没有默认的state,所以初始化一个默认的state树
       store = {

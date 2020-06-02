@@ -1,21 +1,28 @@
 /* eslint-disable prettier/prettier */
-/* eslint-disable react-native/no-inline-styles */
-/* eslint-disable prettier/prettier */
 import React, {Component} from 'react';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import HTMLView from 'react-native-htmlview';
 
-export default class PopularItem extends Component {
-  constructor(props) {
-    super(props);
-  }
+import {
+  SafeAreaView,
+  StyleSheet,
+  ScrollView,
+  View,
+  Text,
+  StatusBar,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
+
+export default class TrendingItem extends Component {
   render() {
-    const {projectModel} = this.props; //获取数据
-
+    const {projectModel} = this.props;
     const item = projectModel;
-    if (!item || !item.owner) {
+    console.log(item);
+    if (!item) {
       return null;
     }
+
     //搜藏按钮
     let favouriteButton = (
       <TouchableOpacity
@@ -26,24 +33,41 @@ export default class PopularItem extends Component {
         <FontAwesome name={'star-o'} size={26} style={{color: 'red'}} />
       </TouchableOpacity>
     );
-
     return (
       <TouchableOpacity onPress={() => this.onItemClick()}>
         <View style={styles.cell_container}>
-          <Text style={styles.title}>{item.full_name || item.fullName}</Text>
-          <Text style={styles.description}>{item.description}</Text>
+          <Text style={styles.title}>
+            {item.fullName ? item.fullName.split('"')[0] : null}
+          </Text>
+          <HTMLView
+            value={item.description}
+            onLinkPress={(url) => {}}
+            stylesheet={{
+              p: styles.description,
+              a: styles.description,
+            }}
+          />
+          <Text style={styles.description}>{item.meta}</Text>
           <View style={styles.row}>
             <View style={styles.row}>
-              <Text style={styles.text}>{'Author:'}</Text>
-              <Image
-                style={{height: 22, width: 22}}
-                source={{uri: item.owner.avatar_url || item.url}}
-              />
+              <Text>Built by: </Text>
+              {item.contributors.map((result, i, arr) => {
+                if (i % 2 === 0) {
+                  return;
+                }
+                return (
+                  <Image
+                    key={i}
+                    style={{height: 22, width: 22, margin: 2}}
+                    source={{uri: arr[i]}}
+                  />
+                );
+              })}
             </View>
             <View
               style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-              <Text style={styles.text}>{'Start:'}</Text>
-              <Text style={styles.text}>{item.stargazers_count}</Text>
+              <Text>Start:</Text>
+              <Text>{item.starCount}</Text>
             </View>
             {favouriteButton}
           </View>
@@ -55,7 +79,7 @@ export default class PopularItem extends Component {
 
 const styles = StyleSheet.create({
   cell_container: {
-    backgroundColor: '#bae637',
+    backgroundColor: '#d3adf7',
     padding: 10,
     marginLeft: 5,
     marginRight: 5,
@@ -77,19 +101,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
     marginBottom: 2,
-    color: '#ff7875',
+    color: '#212121',
     fontWeight: 'bold',
     fontFamily: 'cuisive',
   },
   description: {
-    fontFamily: 'tahoma',
     fontSize: 14,
     marginBottom: 2,
-    color: '#5c0011',
-    letterSpacing: 1,
-    fontWeight: 'bold',
-  },
-  text: {
-    color: '#5cdbd3',
+    color: '#757575',
   },
 });

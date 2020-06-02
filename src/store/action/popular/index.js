@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import Types from '../types';
 import DataStore, {FLAG_STORAGE} from '../../../Dao/DataStore';
-// import {handleData, _projectModels} from '../ActionUtil';
+import {_projectModels, handleData} from '../ActionUtil';
 // /**
 //  * 获取最热数据的异步action
 //  * @param storeName
@@ -156,7 +156,13 @@ export function onLoadPopularData(storeName, url, pageSize) {
       .fetchData(url, FLAG_STORAGE.flag_popular)
       .then((data) => {
         // handleData(dispatch, storeName, data);
-        handleData(dispatch, storeName, data, pageSize);
+        handleData(
+          Types.POPOLAR_REFRESH_SUCCESS,
+          dispatch,
+          storeName,
+          data,
+          pageSize
+        );
       })
       .catch((error) => {
         dispatch({
@@ -166,21 +172,6 @@ export function onLoadPopularData(storeName, url, pageSize) {
         });
       });
   };
-}
-
-function handleData(dispatch, storeName, data, pageSize) {
-  let fixItems = [];
-  if (data && data.data && data.data.items) {
-    fixItems = data.data.items;
-  }
-  dispatch({
-    type: Types.POPOLAR_REFRESH_SUCCESS,
-    items: fixItems,
-    projectModels:
-      pageSize > fixItems.length ? fixItems : fixItems.slice(0, pageSize), //第一次加载的数据
-    storeName, //es7语法,相当于storeName:storeName
-    pageIndex: 1,
-  });
 }
 
 /**

@@ -37,6 +37,8 @@ export function handleData(
   dispatch({
     type: actionType,
     items: fixItems,
+    projectModels:
+      pageSize > fixItems.length ? fixItems : fixItems.slice(0, pageSize), //第一次加载数据
     storeName,
     pageIndex: 1,
     ...params,
