@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
-import {AsyncStorage} from 'react-native';
+// import {AsyncStorage} from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import Trending from 'GitHubTrending';
 
 export const FLAG_STORAGE = {

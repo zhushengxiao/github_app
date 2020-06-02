@@ -9,6 +9,7 @@ import {
 } from 'react-navigation-redux-helpers';
 import HomePage from '../pages/HomePage';
 import Welcomepage from '../pages/WelcomePage';
+import DetailsPage from '../pages/Detail/DetailPage';
 
 export const rootComponent = 'Init'; //设置根路由
 
@@ -24,6 +25,12 @@ const InitNavigator = createStackNavigator({
 const MainNavigator = createStackNavigator({
   HomePage: {
     screen: HomePage,
+    navigationOptions: {
+      header: null,
+    },
+  },
+  DetailsPage: {
+    screen: DetailsPage,
     navigationOptions: {
       header: null,
     },

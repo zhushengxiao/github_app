@@ -28,7 +28,7 @@ export default class PopularItem extends Component {
     );
 
     return (
-      <TouchableOpacity onPress={() => this.onItemClick()}>
+      <TouchableOpacity onPress={this.props.onSelect}>
         <View style={styles.cell_container}>
           <Text style={styles.title}>{item.full_name || item.fullName}</Text>
           <Text style={styles.description}>{item.description}</Text>

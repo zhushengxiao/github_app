@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable prettier/prettier */
 import React, {Component} from 'react';
@@ -20,6 +21,7 @@ import {createMaterialTopTabNavigator} from 'react-navigation-tabs';
 import Toast from 'react-native-easy-toast';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import TrendingDialog, {TimeSpans} from '../../common/TrendingDialog';
+import {FLAG_STORAGE} from '../../Dao/DataStore';
 
 import TrendingItem from '../../common/TrendingItem';
 import NavigationUtil from '../../navigator/NavigationUtil';
@@ -216,7 +218,20 @@ class TrendingTab extends Component {
 
   renderItem(data) {
     const item = data.item;
-    return <TrendingItem projectModel={item} onSelect={(callBack) => {}} />;
+    return (
+      <TrendingItem
+        projectModel={item}
+        onSelect={(callBack) => {
+          NavigationUtil.goPage(
+            {
+              projectModel: item,
+              flag: FLAG_STORAGE.flag_trending,
+            },
+            'DetailsPage'
+          );
+        }}
+      />
+    );
   }
 
   /**

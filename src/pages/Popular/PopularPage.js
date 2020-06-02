@@ -20,7 +20,7 @@ import NavigationBar from '../../common/NavigationBar';
 // import EventBus from 'react-native-event-bus';
 // import EventTypes from '../../utils/EventTypes';
 
-// import NavigationUtil from '../../navigator/NavigationUtil';
+import NavigationUtil from '../../navigator/NavigationUtil';
 // import FavoriteUtil from '../../utils/FavoriteUtil';
 
 import FavoriteDao from '../../Dao/FavoriteDao';
@@ -81,6 +81,7 @@ export default class PopularView extends Component<Props> {
           scrollEnabled: true, //可滚动
           style: {
             backgroundColor: '#95de64',
+            height: 50, //开启scrollEnabled后再Android上初次加载时闪烁问题,给个固定高度
           },
           indicatorStyle: styles.indStyle, //指示器样式,就是tab下面那个横线
           labelStyle: styles.labelStyle, //tab上的文字属性
@@ -135,7 +136,20 @@ class PopularTab extends Component {
   renderItem(data) {
     const item = data.item;
     // console.log('dataItem================>', data);
-    return <PopularItem projectModel={item} onSelect={(callBack) => {}} />;
+    return (
+      <PopularItem
+        projectModel={item}
+        onSelect={(callBack) => {
+          NavigationUtil.goPage(
+            {
+              flag: FLAG_STORAGE.flag_popular,
+              projectModel: item,
+            },
+            'DetailsPage'
+          );
+        }}
+      />
+    );
   }
 
   genIndicator() {
