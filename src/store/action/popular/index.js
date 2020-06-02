@@ -155,7 +155,6 @@ export function onLoadPopularData(storeName, url, pageSize) {
     dataStore
       .fetchData(url, FLAG_STORAGE.flag_popular)
       .then((data) => {
-        console.log('onLoadPopularData', data);
         // handleData(dispatch, storeName, data);
         handleData(dispatch, storeName, data, pageSize);
       })

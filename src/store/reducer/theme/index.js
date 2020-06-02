@@ -6,7 +6,6 @@ const defaultState = {
 };
 
 export default function onAction(state = defaultState, action) {
-  console.log('theme', action.theme);
   switch (action.type) {
     case Types.THEME_CHANGE:
       return {

@@ -16,6 +16,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {createAppContainer} from 'react-navigation';
 import {createMaterialTopTabNavigator} from 'react-navigation-tabs';
 import Toast from 'react-native-easy-toast';
+import NavigationBar from '../../common/NavigationBar';
 // import EventBus from 'react-native-event-bus';
 // import EventTypes from '../../utils/EventTypes';
 
@@ -32,6 +33,8 @@ import PopularItem from '../../common/PopularItem';
 
 const URL = 'https://api.github.com/search/repositories?q=';
 const QUERY_STR = '&sort=stars';
+
+const THEME_COLOR = '#678';
 
 type Props = {};
 export default class PopularView extends Component<Props> {
@@ -55,6 +58,20 @@ export default class PopularView extends Component<Props> {
   }
 
   render() {
+    //状态栏和navigationbar
+    let statusBar = {
+      backgroundColor: THEME_COLOR,
+      barStyle: 'light-content',
+    };
+
+    let navigationBar = (
+      <NavigationBar
+        title={'最热'}
+        statusBar={statusBar}
+        style={{backgroundColor: THEME_COLOR}}
+      />
+    );
+
     //上方tab
     const TabNavigator = createAppContainer(
       createMaterialTopTabNavigator(this._genTabs(), {
@@ -71,7 +88,8 @@ export default class PopularView extends Component<Props> {
       })
     );
     return (
-      <View style={{flex: 1, marginTop: 30}}>
+      <View style={{flex: 1}}>
+        {navigationBar}
         <TabNavigator />
       </View>
     );
@@ -154,7 +172,6 @@ class PopularTab extends Component {
 
   render() {
     let store = this._store();
-    console.log('store.hideLoadingMore', store.hideLoadingMore);
     return (
       <View style={styles.container}>
         <FlatList

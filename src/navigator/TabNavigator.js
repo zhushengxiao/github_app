@@ -96,7 +96,6 @@ class TabNavigator extends Component {
     return this.bottomTabbars;
   }
   render() {
-    console.log('theme', this.props.theme);
     const BottonTabbarComponent = this._tabNavigator();
 
     return (
@@ -123,7 +122,6 @@ class TabBarComponent extends Component {
   }
 
   render() {
-    console.log('themeTab', this.props.theme);
     // const {routes, index} = this.props.navigation.state; //获取tabbar数组和相应的index
     // if (routes[index].params) {
     //   //如果当前tabbar有params

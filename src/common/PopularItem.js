@@ -34,7 +34,7 @@ export default class PopularItem extends Component {
           <Text style={styles.description}>{item.description}</Text>
           <View style={styles.row}>
             <View style={styles.row}>
-              <Text>{'Author:'}</Text>
+              <Text style={styles.text}>{'Author:'}</Text>
               <Image
                 style={{height: 22, width: 22}}
                 source={{uri: item.owner.avatar_url}}
@@ -42,8 +42,8 @@ export default class PopularItem extends Component {
             </View>
             <View
               style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-              <Text>{'Start:'}</Text>
-              <Text>{item.stargazers_count}</Text>
+              <Text style={styles.text}>{'Start:'}</Text>
+              <Text style={styles.text}>{item.stargazers_count}</Text>
             </View>
             {favouriteButton}
           </View>
@@ -55,7 +55,7 @@ export default class PopularItem extends Component {
 
 const styles = StyleSheet.create({
   cell_container: {
-    backgroundColor: '#ffe58f',
+    backgroundColor: '#bae637',
     padding: 10,
     marginLeft: 5,
     marginRight: 5,
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
     marginBottom: 2,
-    color: '#212121',
+    color: '#ff7875',
     fontWeight: 'bold',
     fontFamily: 'cuisive',
   },
@@ -85,8 +85,11 @@ const styles = StyleSheet.create({
     fontFamily: 'tahoma',
     fontSize: 14,
     marginBottom: 2,
-    color: '#757575',
+    color: '#5c0011',
     letterSpacing: 1,
     fontWeight: 'bold',
+  },
+  text: {
+    color: '#5cdbd3',
   },
 });
