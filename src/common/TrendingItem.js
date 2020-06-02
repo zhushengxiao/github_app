@@ -18,7 +18,6 @@ export default class TrendingItem extends Component {
   render() {
     const {projectModel} = this.props;
     const item = projectModel;
-    console.log(item);
     if (!item) {
       return null;
     }

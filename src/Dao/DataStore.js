@@ -110,7 +110,7 @@ export default class DataStore {
             if (!items) {
               throw new Error('responseData is null');
             }
-            console.log(items);
+
             this.saveData(url, items);
             resolve(items);
           })
