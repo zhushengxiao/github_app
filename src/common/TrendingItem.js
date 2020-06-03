@@ -37,7 +37,7 @@ export default class TrendingItem extends BaseItem {
       <TouchableOpacity
         //   onPress={this.props.onSelect}
         onPress={() => this.onItemClick()} //执行baseItem里面的方法s
-      >
+        style={styles.box}>
         <View style={styles.cell_container}>
           <Text style={styles.title}>
             {item.fullName ? item.fullName.split('"')[0] : null}
@@ -95,6 +95,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.4,
     shadowRadius: 1,
     elevation: 2,
+    // width: 360,
   },
   row: {
     justifyContent: 'space-between',

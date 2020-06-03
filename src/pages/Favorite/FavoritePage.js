@@ -13,6 +13,8 @@ import actions from '../../store/action';
 import {createAppContainer} from 'react-navigation';
 import {createMaterialTopTabNavigator} from 'react-navigation-tabs';
 import Toast from 'react-native-easy-toast';
+import EventBus from 'react-native-event-bus';
+import EventTypes from '../../utils/EventTypes';
 import NavigationUtil from '../../navigator/NavigationUtil';
 
 import PopularItem from '../../common/PopularItem';
@@ -96,6 +98,19 @@ class FavoriteTab extends Component<Props> {
 
   componentDidMount() {
     this.loadData(true);
+    EventBus.getInstance().addListener(
+      EventTypes.bottom_tab_select,
+      (this.listener = (data) => {
+        if (data.to === 2) {
+          //点击了第2个bottomtabbar
+          this.loadData(false); //不显示菊花
+        }
+      })
+    );
+  }
+
+  componentWillUnmount() {
+    EventBus.getInstance().removeListener(this.listener);
   }
 
   loadData(isShowLoading) {
@@ -127,6 +142,11 @@ class FavoriteTab extends Component<Props> {
       isFavorite,
       this.props.flag
     );
+    if (this.storeName === FLAG_STORAGE.flag_popular) {
+      EventBus.getInstance().fireEvent(EventTypes.favorite_changed_popular); //发送通知,最热模块收藏状态有改变
+    } else {
+      EventBus.getInstance().fireEvent(EventTypes.favoriteChanged_trending); //发送通知,趋势模块收藏状态有改变
+    }
   }
 
   renderItem(data) {

@@ -102,8 +102,8 @@ class TabNavigator extends Component {
       <BottonTabbarComponent
         onNavigationStateChange={(prevState, newState, action) => {
           EventBus.getInstance().fireEvent(EventTypes.bottom_tab_select, {
-            from: prevState.index,
-            to: newState.index,
+            from: prevState.index, //上一次点击的tabbar
+            to: newState.index, //这次点击的tabbar
           });
         }}
       />

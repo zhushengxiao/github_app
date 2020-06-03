@@ -17,8 +17,8 @@ import {createAppContainer} from 'react-navigation';
 import {createMaterialTopTabNavigator} from 'react-navigation-tabs';
 import Toast from 'react-native-easy-toast';
 import NavigationBar from '../../common/NavigationBar';
-// import EventBus from 'react-native-event-bus';
-// import EventTypes from '../../utils/EventTypes';
+import EventBus from 'react-native-event-bus';
+import EventTypes from '../../utils/EventTypes';
 
 import NavigationUtil from '../../navigator/NavigationUtil';
 import FavoriteUtil from '../../utils/FavoriteUtil';
@@ -104,14 +104,39 @@ class PopularTab extends Component {
     super(props);
     const {tabLabel} = this.props;
     this.storeName = tabLabel;
+    this.isFavoriteChanged = false; //是否有收藏状态的改变
   }
 
   componentDidMount() {
     this.loadData();
+    EventBus.getInstance().addListener(
+      EventTypes.favorite_changed_popular,
+      (this.favoriteChangeListener = () => {
+        this.isFavoriteChanged = true; //从收藏页面传来通知,在收藏页面改变了最热模块的收藏状态
+      })
+    );
+    EventBus.getInstance().addListener(
+      EventTypes.bottom_tab_select,
+      (this.bottomTabSelectListener = (data) => {
+        if (data.to === 0 && this.isFavoriteChanged) {
+          //点击了第0个bottomtabbar,并且有收藏状态改变
+          this.loadData(null, true);
+        }
+      })
+    );
   }
 
-  loadData(loadMore) {
-    const {onLoadPopularData, onLoadMorePopular} = this.props;
+  componentWillUnmount() {
+    EventBus.getInstance().removeListener(this.favoriteChangeListener);
+    EventBus.getInstance().removeListener(this.bottomTabSelectListener);
+  }
+
+  loadData(loadMore, refreshFavorite) {
+    const {
+      onLoadPopularData,
+      onLoadMorePopular,
+      onFlushPopularFavorite,
+    } = this.props;
     const store = this._store();
     const url = this.genFetchUrl(this.storeName);
     if (loadMore) {
@@ -125,6 +150,15 @@ class PopularTab extends Component {
           this.refs.toast.show('没有更多数据了');
         }
       );
+    } else if (refreshFavorite) {
+      onFlushPopularFavorite(
+        this.storeName,
+        store.pageIndex,
+        currentPageSize,
+        store.items,
+        favoriteDao
+      );
+      this.isFavoriteChanged = false;
     } else {
       onLoadPopularData(this.storeName, url, currentPageSize, favoriteDao);
     }
@@ -258,6 +292,22 @@ const mapDispatchToProps = (dispatch) => ({
         items,
         favoriteDao,
         callBack
+      )
+    ),
+  onFlushPopularFavorite: (
+    storeName,
+    pageIndex,
+    pageSize,
+    items,
+    favoriteDao
+  ) =>
+    dispatch(
+      actions.onFlushPopularFavorite(
+        storeName,
+        pageIndex,
+        pageSize,
+        items,
+        favoriteDao
       )
     ),
 });

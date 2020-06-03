@@ -33,6 +33,9 @@ const favoriteDao = new FavoriteDao(FLAG_STORAGE.flag_trending);
 
 import NavigationBar from '../../common/NavigationBar';
 
+import EventBus from 'react-native-event-bus';
+import EventTypes from '../../utils/EventTypes';
+
 const EVENT_TYPE_TIME_SPAN_CHANGE = 'EVENT_TYPE_TIME_SPAN_CHANGE'; //事件名
 const URL = 'https://github.com/trending/';
 const THEME_COLOR = '#a0d911';
@@ -167,6 +170,7 @@ class TrendingTab extends Component {
     const {tabLabel, timeSpan} = this.props;
     this.storeName = tabLabel;
     this.timeSpan = timeSpan; //trendingDialog的哪个item
+    this.isFavoriteChanged = false; //是否有收藏状态的改变
   }
 
   componentDidMount() {
@@ -179,16 +183,37 @@ class TrendingTab extends Component {
         this.loadData();
       }
     );
+    EventBus.getInstance().addListener(
+      EventTypes.favorite_changed_trending,
+      (this.favoriteChangeListener = () => {
+        this.isFavoriteChanged = true;
+      })
+    );
+
+    EventBus.getInstance().addListener(
+      EventTypes.bottom_tab_select,
+      (this.bottomTabSelectListener = (data) => {
+        if (data.to === 1 && this.isFavoriteChanged) {
+          this.loadData(null, true);
+        }
+      })
+    );
   }
 
   componentWillUnmount() {
     if (this.timeSpanChangeListener) {
       this.timeSpanChangeListener.remove(); //移除事件监听
     }
+    EventBus.getInstance().removeListener(this.favoriteChangeListener);
+    EventBus.getInstance().removeListener(this.bottomTabSelectListener);
   }
 
-  loadData(loadMore) {
-    const {onRefreshTrending, onLoadMoreTrending} = this.props;
+  loadData(loadMore, refreshFavorite) {
+    const {
+      onRefreshTrending,
+      onLoadMoreTrending,
+      onFlushTrendingFavorite,
+    } = this.props;
     const store = this._store();
     const url = this.genFetchUrl(this.storeName);
     if (loadMore) {
@@ -202,6 +227,15 @@ class TrendingTab extends Component {
           this.refs.toast.show('没有更多数据了');
         }
       );
+    } else if (refreshFavorite) {
+      onFlushTrendingFavorite(
+        this.storeName,
+        store.pageIndex,
+        currentPageSize,
+        store.items,
+        favoriteDao
+      );
+      this.isFavoriteChanged = false;
     } else {
       onRefreshTrending(this.storeName, url, currentPageSize, favoriteDao);
     }
@@ -337,6 +371,22 @@ const mapDispatchToProps = (dispatch) => ({
         items,
         favoriteDao,
         callBack
+      )
+    ),
+  onFlushTrendingFavorite: (
+    storeName,
+    pageIndex,
+    pageSize,
+    items,
+    favoriteDao
+  ) =>
+    dispatch(
+      actions.onFlushTrendingFavorite(
+        storeName,
+        pageIndex,
+        pageSize,
+        items,
+        favoriteDao
       )
     ),
 });
