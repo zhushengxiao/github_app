@@ -21,7 +21,7 @@ import NavigationBar from '../../common/NavigationBar';
 // import EventTypes from '../../utils/EventTypes';
 
 import NavigationUtil from '../../navigator/NavigationUtil';
-// import FavoriteUtil from '../../utils/FavoriteUtil';
+import FavoriteUtil from '../../utils/FavoriteUtil';
 
 import FavoriteDao from '../../Dao/FavoriteDao';
 const favoriteDao = new FavoriteDao(FLAG_STORAGE.flag_popular);
@@ -120,12 +120,13 @@ class PopularTab extends Component {
         ++store.pageIndex,
         currentPageSize,
         store.items,
+        favoriteDao,
         (callback) => {
           this.refs.toast.show('没有更多数据了');
         }
       );
     } else {
-      onLoadPopularData(this.storeName, url, currentPageSize);
+      onLoadPopularData(this.storeName, url, currentPageSize, favoriteDao);
     }
   }
 
@@ -146,6 +147,14 @@ class PopularTab extends Component {
               projectModel: item,
             },
             'DetailsPage'
+          );
+        }}
+        onFavorite={(item, isFavorite) => {
+          return FavoriteUtil.onFavorite(
+            favoriteDao,
+            item,
+            isFavorite,
+            FLAG_STORAGE.flag_popular
           );
         }}
       />
@@ -230,11 +239,25 @@ const mapStateToProps = (state) => ({
   popular: state.popular, //从reducer文件夹的index.js文件中获取对应的state给props
 });
 const mapDispatchToProps = (dispatch) => ({
-  onLoadPopularData: (storeName, url, pageSize) =>
-    dispatch(actions.onLoadPopularData(storeName, url, pageSize)),
-  onLoadMorePopular: (storeName, pageIndex, pageSize, items, callBack) =>
+  onLoadPopularData: (storeName, url, pageSize, favoriteDao) =>
+    dispatch(actions.onLoadPopularData(storeName, url, pageSize, favoriteDao)),
+  onLoadMorePopular: (
+    storeName,
+    pageIndex,
+    pageSize,
+    items,
+    favoriteDao,
+    callBack
+  ) =>
     dispatch(
-      actions.onLoadMorePopular(storeName, pageIndex, pageSize, items, callBack)
+      actions.onLoadMorePopular(
+        storeName,
+        pageIndex,
+        pageSize,
+        items,
+        favoriteDao,
+        callBack
+      )
     ),
 });
 const PopularTabPage = connect(mapStateToProps, mapDispatchToProps)(PopularTab);

@@ -1,7 +1,6 @@
 /* eslint-disable prettier/prettier */
 import ProjectModel from '../../model/ProjectModel';
 import Utils from '../../utils/Utils';
-import {object} from 'prop-types';
 
 /**
  * 处理数据
@@ -34,25 +33,17 @@ export function handleData(
   //第一次要加载的数据
   let showItems =
     pageSize > fixItems.length ? fixItems : fixItems.slice(0, pageSize);
-  dispatch({
-    type: actionType,
-    items: fixItems,
-    projectModels:
-      pageSize > fixItems.length ? fixItems : fixItems.slice(0, pageSize), //第一次加载数据
-    storeName,
-    pageIndex: 1,
-    ...params,
+
+  _projectModels(showItems, favoriteDao, (projectModels) => {
+    dispatch({
+      type: actionType,
+      items: fixItems,
+      projectModels: projectModels,
+      storeName,
+      pageIndex: 1,
+      ...params,
+    });
   });
-  //   _projectModels(showItems, favoriteDao, (projectModels) => {
-  //     dispatch({
-  //       type: actionType,
-  //       items: fixItems,
-  //       projectModels: projectModels,
-  //       storeName,
-  //       pageIndex: 1,
-  //       ...params,
-  //     });
-  //   });
 }
 
 /**

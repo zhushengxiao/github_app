@@ -148,7 +148,7 @@ import {_projectModels, handleData} from '../ActionUtil';
 //   };
 // }
 
-export function onLoadPopularData(storeName, url, pageSize) {
+export function onLoadPopularData(storeName, url, pageSize, favoriteDao) {
   return (dispatch) => {
     dispatch({type: Types.POPULAR_REFRESH, storeName: storeName});
     let dataStore = new DataStore();
@@ -161,7 +161,8 @@ export function onLoadPopularData(storeName, url, pageSize) {
           dispatch,
           storeName,
           data,
-          pageSize
+          pageSize,
+          favoriteDao
         );
       })
       .catch((error) => {
@@ -190,6 +191,7 @@ export function onLoadMorePopular(
   pageIndex,
   pageSize,
   dataArray = [],
+  favoriteDao,
   callBack
 ) {
   return (dispatch) => {
@@ -214,11 +216,13 @@ export function onLoadMorePopular(
             ? dataArray.length
             : pageSize * pageIndex;
         // console.log(pageIndex, max);
-        dispatch({
-          type: Types.POPOLAR_LOAD_MORE_SUCCESS,
-          storeName,
-          pageIndex,
-          projectModels: dataArray.slice(0, max),
+        _projectModels(dataArray.slice(0, max), favoriteDao, (data) => {
+          dispatch({
+            type: Types.POPOLAR_LOAD_MORE_SUCCESS,
+            storeName,
+            pageIndex,
+            projectModels: data,
+          });
         });
       }
     }, 500);

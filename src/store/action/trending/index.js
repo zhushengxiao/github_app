@@ -12,7 +12,7 @@ import {_projectModels, handleData} from '../ActionUtil';
  * @returns {function(*=)}
  */
 
-export function onRefreshTrending(storeName, url, pageSize) {
+export function onRefreshTrending(storeName, url, pageSize, favoriteDao) {
   return (dispatch) => {
     dispatch({type: Types.TRENDING_REFRESH, storeName: storeName});
     let dataStore = new DataStore();
@@ -24,7 +24,8 @@ export function onRefreshTrending(storeName, url, pageSize) {
           dispatch,
           storeName,
           data,
-          pageSize
+          pageSize,
+          favoriteDao
         );
       })
       .catch((error) => {

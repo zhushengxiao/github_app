@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import {AsyncStorage} from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 const FAVORITE_KEY_PREFIX = 'favorite_';
 export default class FavoriteDao {
   constructor(flag) {

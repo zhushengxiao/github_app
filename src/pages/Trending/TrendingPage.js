@@ -26,6 +26,11 @@ import {FLAG_STORAGE} from '../../Dao/DataStore';
 import TrendingItem from '../../common/TrendingItem';
 import NavigationUtil from '../../navigator/NavigationUtil';
 
+import FavoriteUtil from '../../utils/FavoriteUtil';
+
+import FavoriteDao from '../../Dao/FavoriteDao';
+const favoriteDao = new FavoriteDao(FLAG_STORAGE.flag_trending);
+
 import NavigationBar from '../../common/NavigationBar';
 
 const EVENT_TYPE_TIME_SPAN_CHANGE = 'EVENT_TYPE_TIME_SPAN_CHANGE'; //事件名
@@ -192,12 +197,13 @@ class TrendingTab extends Component {
         store.pageIndex + 1,
         currentPageSize,
         store.items,
+        favoriteDao,
         (callback) => {
           this.refs.toast.show('没有更多数据了');
         }
       );
     } else {
-      onRefreshTrending(this.storeName, url, currentPageSize);
+      onRefreshTrending(this.storeName, url, currentPageSize, favoriteDao);
     }
   }
 
@@ -230,6 +236,14 @@ class TrendingTab extends Component {
             'DetailsPage'
           );
         }}
+        onFavorite={(item, isFavorite) =>
+          FavoriteUtil.onFavorite(
+            favoriteDao,
+            item,
+            isFavorite,
+            FLAG_STORAGE.flag_trending
+          )
+        }
       />
     );
   }
@@ -256,7 +270,7 @@ class TrendingTab extends Component {
 
   render() {
     let store = this._store();
-    // console.log('store--------------------->', store);
+    console.log('store--------------------->', store);
     return (
       <View style={styles.container}>
         <FlatList
@@ -304,15 +318,23 @@ const mapStateToProps = (state) => ({
   trending: state.trending, //从reducer文件夹的index.js文件中获取对应的state给props
 });
 const mapDispatchToProps = (dispatch) => ({
-  onRefreshTrending: (storeName, url, pageSize) =>
-    dispatch(actions.onRefreshTrending(storeName, url, pageSize)),
-  onLoadMoreTrending: (storeName, pageIndex, pageSize, items, callBack) =>
+  onRefreshTrending: (storeName, url, pageSize, favoriteDao) =>
+    dispatch(actions.onRefreshTrending(storeName, url, pageSize, favoriteDao)),
+  onLoadMoreTrending: (
+    storeName,
+    pageIndex,
+    pageSize,
+    items,
+    favoriteDao,
+    callBack
+  ) =>
     dispatch(
       actions.onLoadMoreTrending(
         storeName,
         pageIndex,
         pageSize,
         items,
+        favoriteDao,
         callBack
       )
     ),

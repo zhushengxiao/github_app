@@ -4,28 +4,29 @@
 import React, {Component} from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import BaseItem from './BaseItem';
 
-export default class PopularItem extends Component {
+export default class PopularItem extends BaseItem {
   constructor(props) {
     super(props);
   }
   render() {
     const {projectModel} = this.props; //获取数据
 
-    const item = projectModel;
+    const {item} = projectModel;
     if (!item || !item.owner) {
       return null;
     }
-    //搜藏按钮
-    let favouriteButton = (
-      <TouchableOpacity
-        style={{padding: 6}} //padding:增加点击的范围
-        onPress={() => {}}
-        underlayColor={'transparent'} //按下颜色,透明
-      >
-        <FontAwesome name={'star-o'} size={26} style={{color: 'red'}} />
-      </TouchableOpacity>
-    );
+    // //搜藏按钮
+    // let favouriteButton = (
+    //   <TouchableOpacity
+    //     style={{padding: 6}} //padding:增加点击的范围
+    //     onPress={() => {}}
+    //     underlayColor={'transparent'} //按下颜色,透明
+    //   >
+    //     <FontAwesome name={'star-o'} size={26} style={{color: 'red'}} />
+    //   </TouchableOpacity>
+    // );
 
     return (
       <TouchableOpacity onPress={this.props.onSelect}>
@@ -45,7 +46,7 @@ export default class PopularItem extends Component {
               <Text style={styles.text}>{'Start:'}</Text>
               <Text style={styles.text}>{item.stargazers_count}</Text>
             </View>
-            {favouriteButton}
+            {this._favoriteIcon()}
           </View>
         </View>
       </TouchableOpacity>

@@ -13,11 +13,12 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
+import BaseItem from './BaseItem';
 
-export default class TrendingItem extends Component {
+export default class TrendingItem extends BaseItem {
   render() {
     const {projectModel} = this.props;
-    const item = projectModel;
+    const {item} = projectModel;
     if (!item) {
       return null;
     }
@@ -68,7 +69,7 @@ export default class TrendingItem extends Component {
               <Text>Start:</Text>
               <Text>{item.starCount}</Text>
             </View>
-            {favouriteButton}
+            {this._favoriteIcon()}
           </View>
         </View>
       </TouchableOpacity>
