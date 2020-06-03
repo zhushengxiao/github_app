@@ -145,6 +145,7 @@ class PopularTab extends Component {
             {
               flag: FLAG_STORAGE.flag_popular,
               projectModel: item,
+              callBack,
             },
             'DetailsPage'
           );

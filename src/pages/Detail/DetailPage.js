@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable prettier/prettier */
 import React, {Component} from 'react';
@@ -22,6 +23,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import WebView from 'react-native-webview';
 
 import BackPressComponent from '../../common/BackPressComponent';
+import FavoriteDao from '../../Dao/FavoriteDao';
 
 const TRENDING_URL = 'https://github.com/';
 const THEME_COLOR = '#678';
@@ -32,13 +34,16 @@ export default class DetailPage extends Component {
     //通过 this.props.navigation.state.params.xxx 获取上个页面通过navigation传过来的数据
     this.params = this.props.navigation.state.params;
     const {projectModel, flag} = this.params;
-    this.url = projectModel.html_url || TRENDING_URL + projectModel.fullName;
-    const title = projectModel.full_name || projectModel.fullName;
+    this.favoriteDao = new FavoriteDao(flag);
+    this.url =
+      projectModel.item.html_url || TRENDING_URL + projectModel.item.fullName;
+    const title = projectModel.item.full_name || projectModel.item.fullName;
 
     this.state = {
       title: title,
       url: this.url,
       canGoBack: false, //网页能否后退
+      isFavorite: projectModel.isFavorite,
     };
 
     //处理Android物理返回键
@@ -63,15 +68,33 @@ export default class DetailPage extends Component {
     }
   }
 
+  onFavoriteButtonClick() {
+    const {projectModel, callBack} = this.params;
+    // console.log('callback---------->', callBack);
+    const isFavorite = (projectModel.isFavorite = !projectModel.isFavorite);
+    callBack(isFavorite); //调用,baseItem中的setFavoriteState方法,更新最热或趋势cell的收藏状态
+    let key = projectModel.item.fullName
+      ? projectModel.item.fullName
+      : projectModel.item.id.toString();
+    this.setState({
+      isFavorite: isFavorite,
+    });
+    if (projectModel.isFavorite) {
+      this.favoriteDao.saveFavoriteItem(key, JSON.stringify(projectModel.item));
+    } else {
+      this.favoriteDao.removeFavoriteItem(key);
+    }
+  }
+
   renderRightButton() {
     return (
       <View style={{flexDirection: 'row'}}>
         <TouchableOpacity
           onPress={() => {
-            console.log('点击了收藏按钮');
+            this.onFavoriteButtonClick();
           }}>
           <FontAwesome
-            name={'star'}
+            name={this.state.isFavorite ? 'star' : 'star-o'}
             size={20}
             style={{color: 'white', marginRight: 10}}
           />

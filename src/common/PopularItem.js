@@ -29,7 +29,10 @@ export default class PopularItem extends BaseItem {
     // );
 
     return (
-      <TouchableOpacity onPress={this.props.onSelect}>
+      <TouchableOpacity
+        //   onPress={this.props.onSelect}
+        onPress={() => this.onItemClick()} //执行baseItem里面的方法
+      >
         <View style={styles.cell_container}>
           <Text style={styles.title}>{item.full_name || item.fullName}</Text>
           <Text style={styles.description}>{item.description}</Text>

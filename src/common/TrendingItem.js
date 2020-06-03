@@ -34,7 +34,10 @@ export default class TrendingItem extends BaseItem {
       </TouchableOpacity>
     );
     return (
-      <TouchableOpacity onPress={this.props.onSelect}>
+      <TouchableOpacity
+        //   onPress={this.props.onSelect}
+        onPress={() => this.onItemClick()} //执行baseItem里面的方法s
+      >
         <View style={styles.cell_container}>
           <Text style={styles.title}>
             {item.fullName ? item.fullName.split('"')[0] : null}

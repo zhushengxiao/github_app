@@ -232,6 +232,7 @@ class TrendingTab extends Component {
             {
               projectModel: item,
               flag: FLAG_STORAGE.flag_trending,
+              callBack,
             },
             'DetailsPage'
           );
@@ -270,7 +271,7 @@ class TrendingTab extends Component {
 
   render() {
     let store = this._store();
-    console.log('store--------------------->', store);
+    // console.log('store--------------------->', store);
     return (
       <View style={styles.container}>
         <FlatList
