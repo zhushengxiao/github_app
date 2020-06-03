@@ -9,6 +9,7 @@ import {
 import theme from './theme';
 import popular from './popular';
 import trending from './trending';
+import favorite from './favorite';
 
 // //1.指定默认state
 // const navState = RootNavigator.router.getStateForAction(
@@ -29,6 +30,7 @@ const index = combineReducers({
   theme: theme,
   popular: popular,
   trending: trending,
+  favorite: favorite,
 });
 
 export default index;

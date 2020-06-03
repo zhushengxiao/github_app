@@ -151,6 +151,7 @@ import {_projectModels, handleData} from '../ActionUtil';
 export function onLoadPopularData(storeName, url, pageSize, favoriteDao) {
   return (dispatch) => {
     dispatch({type: Types.POPULAR_REFRESH, storeName: storeName});
+
     let dataStore = new DataStore();
     dataStore
       .fetchData(url, FLAG_STORAGE.flag_popular)
@@ -167,7 +168,7 @@ export function onLoadPopularData(storeName, url, pageSize, favoriteDao) {
       })
       .catch((error) => {
         dispatch({
-          type: Types.POPULAR_REFRESH_FAIL,
+          type: Types.POPOLAR_REFRESH_FAIL,
           storeName, //es7语法,相当于storeName:storeName
           error,
         });

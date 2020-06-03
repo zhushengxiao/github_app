@@ -50,6 +50,9 @@ export default class DetailPage extends Component {
     this.backPress = new BackPressComponent({
       backPress: () => this.onBackPress(),
     });
+
+    const {callBack} = this.params;
+    console.log('callback---------->', callBack);
   }
 
   componentDidMount() {
