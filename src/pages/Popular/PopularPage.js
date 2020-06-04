@@ -30,6 +30,7 @@ import {FLAG_STORAGE} from '../../Dao/DataStore';
 import actions from '../../store/action/index';
 
 import PopularItem from '../../common/PopularItem';
+import {FLAG_LANGUAGE} from '../../Dao/LanguageDao';
 
 const URL = 'https://api.github.com/search/repositories?q=';
 const QUERY_STR = '&sort=stars';
@@ -37,27 +38,34 @@ const QUERY_STR = '&sort=stars';
 const THEME_COLOR = '#678';
 
 type Props = {};
-export default class PopularView extends Component<Props> {
+class PopularPage extends Component<Props> {
   constructor(props) {
     super(props);
     this.tabNames = ['java', 'ios', 'php', 'python', 'swift'];
+    const {onLoadLanguage} = this.props;
+    onLoadLanguage(FLAG_LANGUAGE.flag_key); //请求topNavBar数据
   }
 
   //生成topTab
   _genTabs() {
     const tabs = {};
-    this.tabNames.forEach((item, index) => {
-      tabs[`tab${index}`] = {
-        screen: (props) => <PopularTabPage {...props} tabLabel={item} />, //定义tab时给页面传递参数
-        navigationOptions: {
-          title: item,
-        },
-      };
+    const {keys} = this.props; //topNavBar数据
+    console.log(keys);
+    keys.forEach((item, index) => {
+      if (item.checked) {
+        tabs[`tab${index}`] = {
+          screen: (props) => <PopularTabPage {...props} tabLabel={item.name} />, //定义tab时给页面传递参数
+          navigationOptions: {
+            title: item.name,
+          },
+        };
+      }
     });
     return tabs;
   }
 
   render() {
+    const {keys} = this.props; //topNavBar数据
     //状态栏和navigationbar
     let statusBar = {
       backgroundColor: THEME_COLOR,
@@ -73,29 +81,43 @@ export default class PopularView extends Component<Props> {
     );
 
     //上方tab
-    const TabNavigator = createAppContainer(
-      createMaterialTopTabNavigator(this._genTabs(), {
-        tabBarOptions: {
-          tabStyle: styles.tabStyle, //给topTab设置样式
-          upperCaseLabel: false, //默认文字大写
-          scrollEnabled: true, //可滚动
-          style: {
-            backgroundColor: '#95de64',
-            height: 50, //开启scrollEnabled后再Android上初次加载时闪烁问题,给个固定高度
-          },
-          indicatorStyle: styles.indStyle, //指示器样式,就是tab下面那个横线
-          labelStyle: styles.labelStyle, //tab上的文字属性
-        },
-      })
-    );
+    const TabNavigator = keys.length
+      ? createAppContainer(
+          createMaterialTopTabNavigator(this._genTabs(), {
+            tabBarOptions: {
+              tabStyle: styles.tabStyle, //给topTab设置样式
+              upperCaseLabel: false, //默认文字大写
+              scrollEnabled: true, //可滚动
+              style: {
+                backgroundColor: '#95de64',
+                height: 50, //开启scrollEnabled后再Android上初次加载时闪烁问题,给个固定高度
+              },
+              indicatorStyle: styles.indStyle, //指示器样式,就是tab下面那个横线
+              labelStyle: styles.labelStyle, //tab上的文字属性
+            },
+          })
+        )
+      : null;
     return (
       <View style={{flex: 1}}>
         {navigationBar}
-        <TabNavigator />
+        {TabNavigator && <TabNavigator />}
       </View>
     );
   }
 }
+
+const mapPopularStateToProps = (state) => ({
+  keys: state.language.keys, //topNavBar数据
+});
+const mapPopularDispatchToProps = (dispatch) => ({
+  onLoadLanguage: (flag) => dispatch(actions.onLoadLanguage(flag)),
+});
+//注意：connect只是个function，并不应定非要放在export后面
+export default connect(
+  mapPopularStateToProps,
+  mapPopularDispatchToProps
+)(PopularPage);
 
 const currentPageSize = 10;
 //每一个topTab的具体页面
