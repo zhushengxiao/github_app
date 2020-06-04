@@ -145,7 +145,7 @@ class FavoriteTab extends Component<Props> {
     if (this.storeName === FLAG_STORAGE.flag_popular) {
       EventBus.getInstance().fireEvent(EventTypes.favorite_changed_popular); //发送通知,最热模块收藏状态有改变
     } else {
-      EventBus.getInstance().fireEvent(EventTypes.favoriteChanged_trending); //发送通知,趋势模块收藏状态有改变
+      EventBus.getInstance().fireEvent(EventTypes.favorite_changed_trending); //发送通知,趋势模块收藏状态有改变
     }
   }
 

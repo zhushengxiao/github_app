@@ -139,7 +139,7 @@ class TabBarComponent extends Component {
         // activeTintColor={this.theme.tintColor || this.props.activeTintColor}
         //redux传过来的参数
         activeTintColor={this.theme.tintColor || this.activeTintColor}
-        inactiveTintColor={this.props.theme}
+        inactiveTintColor={'#678'}
       />
     );
   }

@@ -12,8 +12,10 @@ import {
   StatusBar,
   Image,
   TouchableOpacity,
+  Dimensions,
 } from 'react-native';
 import BaseItem from './BaseItem';
+const {height, width} = Dimensions.get('window');
 
 export default class TrendingItem extends BaseItem {
   render() {
@@ -95,7 +97,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.4,
     shadowRadius: 1,
     elevation: 2,
-    // width: 360,
+    width: width,
   },
   row: {
     justifyContent: 'space-between',

@@ -1,29 +1,106 @@
 /* eslint-disable prettier/prettier */
 import React, {Component} from 'react';
-import {Text, View, StyleSheet, Platform} from 'react-native';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {connect} from 'react-redux';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import NavigationUtil from '../../navigator/NavigationUtil';
+import {MORE_MENU} from '../../common/MORE_MENU';
+import NavigationBar from '../../common/NavigationBar';
+import ViewUtil from '../../utils/ViewUtil';
+import GlobalStyles from '../../response/styles/GlobalStyles';
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android:
-    'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
+const THEME_COLOR = '#678';
 
 class MyPage extends Component {
   constructor(props) {
     super(props);
   }
+  //scrollView点击item
+  onClick(menu) {}
+
+  //获取ScrollView的数据源
+  getItem(menu) {
+    return ViewUtil.getMenuItem(() => this.onClick(menu), menu, THEME_COLOR);
+  }
 
   render() {
+    //状态栏和navigationbar
+    let statusBar = {
+      backgroundColor: THEME_COLOR,
+      barStyle: 'light-content',
+    };
+    let navigationBar = (
+      <NavigationBar
+        title={'我的'}
+        statusBar={statusBar}
+        style={{backgroundColor: THEME_COLOR}}
+      />
+    );
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}> welcome to MyPage </Text>
-        <Text style={styles.welcome}>我的</Text>
-        <Text style={styles.instructions}>To get started, edit App.js</Text>
-        <Text style={styles.instructions}>{instructions}</Text>
+      <View style={GlobalStyles.root_container}>
+        {navigationBar}
+        <ScrollView>
+          <TouchableOpacity
+            style={styles.item}
+            onPress={() => this.onClick(MORE_MENU.About)}>
+            <View style={styles.about_left}>
+              <Ionicons
+                name={MORE_MENU.About.icon}
+                size={40}
+                style={{marginRight: 10, color: {THEME_COLOR}}}
+              />
+              <Text>GitHub Popular</Text>
+            </View>
+            <Ionicons
+              name={'ios-arrow-forward'}
+              size={16}
+              style={{
+                marginRight: 10,
+                alignSelf: 'center',
+                color: {THEME_COLOR},
+              }}
+            />
+          </TouchableOpacity>
+          <View style={GlobalStyles.line} />
+          {this.getItem(MORE_MENU.Tutorial)}
+          {/*趋势管理*/}
+          <Text style={styles.groupTitle}>趋势管理</Text>
+          {/*自定义语言*/}
+          {this.getItem(MORE_MENU.Custom_Language)}
+          {/*语言排序*/}
+          <View style={GlobalStyles.line} />
+          {this.getItem(MORE_MENU.Sort_Language)}
+          {/*最热管理*/}
+          <Text style={styles.groupTitle}>最热管理</Text>
+          {/*自定义标签*/}
+          {this.getItem(MORE_MENU.Custom_Key)}
+          {/*标签排序*/}
+          <View style={GlobalStyles.line} />
+          {this.getItem(MORE_MENU.Sort_Key)}
+          {/*标签移除*/}
+          <View style={GlobalStyles.line} />
+          {this.getItem(MORE_MENU.Remove_Key)}
+
+          {/*设置*/}
+          <Text style={styles.groupTitle}>设置</Text>
+          {/*自定义主题*/}
+          {this.getItem(MORE_MENU.Custom_Theme)}
+          {/*关于作者*/}
+          <View style={GlobalStyles.line} />
+          {this.getItem(MORE_MENU.About_Author)}
+          <View style={GlobalStyles.line} />
+          {/*反馈*/}
+          {this.getItem(MORE_MENU.Feedback)}
+          <View style={GlobalStyles.line} />
+          {this.getItem(MORE_MENU.CodePush)}
+        </ScrollView>
       </View>
     );
   }
@@ -40,13 +117,23 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  welcome: {
-    fontSize: 24,
-    color: 0xaa7777,
+  about_left: {
+    alignItems: 'center',
+    flexDirection: 'row',
   },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
+  item: {
+    backgroundColor: 'white',
+    padding: 10,
+    height: 90,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+  },
+  groupTitle: {
+    marginLeft: 10,
+    marginTop: 10,
     marginBottom: 5,
+    fontSize: 12,
+    color: 'gray',
   },
 });

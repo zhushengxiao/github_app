@@ -186,6 +186,7 @@ class TrendingTab extends Component {
     EventBus.getInstance().addListener(
       EventTypes.favorite_changed_trending,
       (this.favoriteChangeListener = () => {
+        console.log('trendung----->bottom_tab_select', this.isFavoriteChanged);
         this.isFavoriteChanged = true;
       })
     );
