@@ -138,6 +138,7 @@ class TrendingPage extends Component {
             indicatorStyle: styles.indicatorStyle,
             labelStyle: styles.labelStyle,
           },
+          lazy: true, //懒加载,当点击这个tab的时候再加载数据
         })
       );
     }

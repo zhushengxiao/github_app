@@ -95,6 +95,7 @@ class PopularPage extends Component<Props> {
               indicatorStyle: styles.indStyle, //指示器样式,就是tab下面那个横线
               labelStyle: styles.labelStyle, //tab上的文字属性
             },
+            lazy: true,
           })
         )
       : null;
