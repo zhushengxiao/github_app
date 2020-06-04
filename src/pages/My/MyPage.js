@@ -23,7 +23,22 @@ class MyPage extends Component {
     super(props);
   }
   //scrollView点击item
-  onClick(menu) {}
+  onClick(menu) {
+    let RouteName = '';
+    let params = {};
+
+    switch (menu) {
+      case MORE_MENU.Tutorial:
+        RouteName = 'WebviewPage';
+        params.title = '教程';
+        params.url = 'https://coding.m.imooc.com/classindex.html?cid=89';
+        break;
+    }
+    if (RouteName) {
+      NavigationUtil.goPage(params, RouteName);
+      //   console.log('routeName---->', RouteName);
+    }
+  }
 
   //获取ScrollView的数据源
   getItem(menu) {

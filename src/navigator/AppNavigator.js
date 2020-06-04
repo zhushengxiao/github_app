@@ -10,6 +10,7 @@ import {
 import HomePage from '../pages/HomePage';
 import Welcomepage from '../pages/WelcomePage';
 import DetailsPage from '../pages/Detail/DetailPage';
+import WebviewPage from '../pages/Webview/WebviewPage';
 
 export const rootComponent = 'Init'; //设置根路由
 
@@ -31,6 +32,12 @@ const MainNavigator = createStackNavigator({
   },
   DetailsPage: {
     screen: DetailsPage,
+    navigationOptions: {
+      header: null,
+    },
+  },
+  WebviewPage: {
+    screen: WebviewPage,
     navigationOptions: {
       header: null,
     },
