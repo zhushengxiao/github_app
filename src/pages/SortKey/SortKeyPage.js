@@ -162,6 +162,7 @@ class SortKeyPage extends Component<Props> {
   }
 
   render() {
+    const {theme} = this.params;
     let title =
       this.params.flag === FLAG_LANGUAGE.flag_language
         ? '语言排序'
@@ -170,13 +171,13 @@ class SortKeyPage extends Component<Props> {
       <NavigationBar
         title={title}
         leftButton={ViewUtil.getLeftBackButton(() => this.onBack())}
-        style={{backgroundColor: THEME_COLOR}}
+        style={theme.styles.navBar}
         rightButton={ViewUtil.getRightButton('保存', () => this.onSave())}
       />
     );
 
     return (
-      <View style={GlobalStyles.root_container} topColor={THEME_COLOR}>
+      <View style={GlobalStyles.root_container} topColor={theme.themeColor}>
         {navigationBar}
         <SortableListView
           data={this.state.checkedArray}
@@ -219,6 +220,7 @@ class SortCell extends Component {
 
 const mapPopularStateToProps = (state) => ({
   language: state.language, //最热或趋势模块topNavbar数据
+  theme: state.theme.theme,
 });
 const mapPopularDispatchToProps = (dispatch) => ({
   onLoadLanguage: (flag) => dispatch(actions.onLoadLanguage(flag)),

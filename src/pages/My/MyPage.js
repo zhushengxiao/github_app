@@ -17,6 +17,8 @@ import ViewUtil from '../../utils/ViewUtil';
 import GlobalStyles from '../../response/styles/GlobalStyles';
 import {FLAG_LANGUAGE} from '../../Dao/LanguageDao';
 
+import actions from '../../store/action/index';
+
 const THEME_COLOR = '#678';
 
 class MyPage extends Component {
@@ -25,8 +27,9 @@ class MyPage extends Component {
   }
   //scrollView点击item
   onClick(menu) {
+    const {theme} = this.props;
     let RouteName = '';
-    let params = {};
+    let params = {theme};
 
     switch (menu) {
       case MORE_MENU.Tutorial:
@@ -59,6 +62,10 @@ class MyPage extends Component {
         RouteName = 'SortKeyPage';
         params.flag = FLAG_LANGUAGE.flag_language;
         break;
+      case MORE_MENU.Custom_Theme:
+        const {onShowCustomThemeView} = this.props;
+        onShowCustomThemeView(true); //弹出themeview
+        break;
     }
     if (RouteName) {
       NavigationUtil.goPage(params, RouteName);
@@ -68,20 +75,26 @@ class MyPage extends Component {
 
   //获取ScrollView的数据源
   getItem(menu) {
-    return ViewUtil.getMenuItem(() => this.onClick(menu), menu, THEME_COLOR);
+    const {theme} = this.props;
+    return ViewUtil.getMenuItem(
+      () => this.onClick(menu),
+      menu,
+      theme.themeColor
+    );
   }
 
   render() {
     //状态栏和navigationbar
+    const {theme} = this.props;
     let statusBar = {
-      backgroundColor: THEME_COLOR,
+      backgroundColor: theme.themeColor,
       barStyle: 'light-content',
     };
     let navigationBar = (
       <NavigationBar
         title={'我的'}
         statusBar={statusBar}
-        style={{backgroundColor: THEME_COLOR}}
+        style={{backgroundColor: theme.themeColor}}
       />
     );
     return (
@@ -95,7 +108,7 @@ class MyPage extends Component {
               <Ionicons
                 name={MORE_MENU.About.icon}
                 size={40}
-                style={{marginRight: 10, color: {THEME_COLOR}}}
+                style={{marginRight: 10, color: theme.themeColor}}
               />
               <Text>GitHub Popular</Text>
             </View>
@@ -105,7 +118,7 @@ class MyPage extends Component {
               style={{
                 marginRight: 10,
                 alignSelf: 'center',
-                color: {THEME_COLOR},
+                color: theme.themeColor,
               }}
             />
           </TouchableOpacity>
@@ -147,8 +160,13 @@ class MyPage extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({});
-const mapDispatchToProps = (dispatch) => ({});
+const mapStateToProps = (state) => ({
+  theme: state.theme.theme,
+});
+const mapDispatchToProps = (dispatch) => ({
+  onShowCustomThemeView: (show) =>
+    dispatch(actions.onShowCustomThemeView(show)),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(MyPage);
 

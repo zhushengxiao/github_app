@@ -177,7 +177,7 @@ class CustomKeyPage extends Component {
         name={checked ? 'ios-checkbox' : 'md-square-outline'}
         size={20}
         style={{
-          color: THEME_COLOR,
+          color: theme.themeColor,
         }}
       />
     );
@@ -197,6 +197,7 @@ class CustomKeyPage extends Component {
   }
 
   render() {
+    const {theme} = this.params;
     let title = this.isRemoveKey ? '标签移除' : '自定义标签';
     title =
       this.params.flag === FLAG_LANGUAGE.flag_language ? '自定义语言' : title;
@@ -205,14 +206,14 @@ class CustomKeyPage extends Component {
       <NavigationBar
         title={title}
         leftButton={ViewUtil.getLeftBackButton(() => this.onBack())}
-        style={{backgroundColor: THEME_COLOR}}
+        style={theme.styles.navBar}
         rightButton={ViewUtil.getRightButton(rightButtonTitle, () =>
           this.onSave()
         )}
       />
     );
     return (
-      <View style={styles.container} topColor={THEME_COLOR}>
+      <View style={styles.container} topColor={theme.themeColor}>
         {navigationBar}
         <ScrollView>{this.renderView()}</ScrollView>
       </View>

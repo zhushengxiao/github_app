@@ -12,7 +12,7 @@
 // };
 
 //创建根action(不是必须)
-import {onThemeChange} from './theme';
+import {onThemeChange, onThemeInit, onShowCustomThemeView} from './theme';
 import {
   onLoadPopularData,
   onLoadMorePopular,
@@ -36,4 +36,6 @@ export default {
   onLoadFavoriteData,
   onFlushTrendingFavorite,
   onLoadLanguage,
+  onThemeInit,
+  onShowCustomThemeView,
 };

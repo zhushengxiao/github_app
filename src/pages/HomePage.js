@@ -1,11 +1,13 @@
 /* eslint-disable prettier/prettier */
 import React, {Component} from 'react';
-import {Text} from 'react-native';
+import {Text, View} from 'react-native';
 import {connect} from 'react-redux';
+import actions from '../store/action/index';
 import {NavigationActions} from 'react-navigation';
 import BackPressComponent from '../common/BackPressComponent';
 import NavigationUtil from '../navigator/NavigationUtil';
 import TabNavigater from '../navigator/TabNavigator';
+import CustomTheme from '../pages/CustomTheme/CustomTheme';
 
 class HomePage extends Component {
   constructor(props) {
@@ -36,16 +38,38 @@ class HomePage extends Component {
     dispatch(NavigationActions.back());
     return true;
   };
+
+  renderCustomThemeView() {
+    const {customThemeViewVisible, onShowCustomThemeView} = this.props;
+    return (
+      <CustomTheme
+        visible={customThemeViewVisible}
+        {...this.props}
+        onClose={() => onShowCustomThemeView(false)}
+      />
+    );
+  }
+
   render() {
     NavigationUtil.navigation = this.props.navigation;
-    return <TabNavigater />;
+    return (
+      <View style={{flex: 1}}>
+        <TabNavigater />
+        {this.renderCustomThemeView()}
+      </View>
+    );
   }
 }
 
 const mapStateToProps = (state) => ({
   nav: state.nav,
+  customThemeViewVisible: state.theme.customThemeViewVisible,
+  theme: state.theme.theme,
 });
-const mapDispatchToProps = (dispatch) => ({});
+const mapDispatchToProps = (dispatch) => ({
+  onShowCustomThemeView: (show) =>
+    dispatch(actions.onShowCustomThemeView(show)),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomePage);
 
