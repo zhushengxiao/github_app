@@ -87,11 +87,13 @@ export default class DataStore {
    */
 
   fetchNetData(url, flag) {
+    // console.log('network');
     return new Promise((resolve, reject) => {
       if (flag !== FLAG_STORAGE.flag_trending) {
         fetch(url)
           .then((response) => {
             if (response.ok) {
+              //   console.log('OK--->');
               return response.json();
             }
             throw new Error('Network response was not ok.');

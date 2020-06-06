@@ -8,10 +8,12 @@ export function onLoadPopularData(storeName, url, pageSize, favoriteDao) {
     dispatch({type: Types.POPULAR_REFRESH, storeName: storeName});
 
     let dataStore = new DataStore();
+    console.log(url);
     dataStore
       .fetchData(url, FLAG_STORAGE.flag_popular)
       .then((data) => {
         // handleData(dispatch, storeName, data);
+        // console.log('populardata--------------------->', data);
         handleData(
           Types.POPOLAR_REFRESH_SUCCESS,
           dispatch,
@@ -22,6 +24,7 @@ export function onLoadPopularData(storeName, url, pageSize, favoriteDao) {
         );
       })
       .catch((error) => {
+        // console.log('populardata--------------------->');
         dispatch({
           type: Types.POPOLAR_REFRESH_FAIL,
           storeName, //es7语法,相当于storeName:storeName

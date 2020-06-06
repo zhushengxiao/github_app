@@ -50,7 +50,7 @@ class PopularPage extends Component<Props> {
   _genTabs() {
     const tabs = {};
     const {keys} = this.props; //topNavBar数据
-    console.log(keys);
+
     keys.forEach((item, index) => {
       if (item.checked) {
         tabs[`tab${index}`] = {
@@ -183,6 +183,7 @@ class PopularTab extends Component {
       );
       this.isFavoriteChanged = false;
     } else {
+      //   console.log('loaddata');
       onLoadPopularData(this.storeName, url, currentPageSize, favoriteDao);
     }
   }
@@ -254,6 +255,7 @@ class PopularTab extends Component {
 
   render() {
     let store = this._store();
+    // console.log('store================>', store);
     return (
       <View style={styles.container}>
         <FlatList
