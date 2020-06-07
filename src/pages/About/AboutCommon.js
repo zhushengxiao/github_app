@@ -119,10 +119,11 @@ export default class AboutCommon {
   }
 
   render(contentView, params) {
+    const {theme} = this.props;
     const renderConfig = this.getParallaxRenderConfig(params);
     return (
       <ParallaxScrollView
-        backgroundColor={THEME_COLOR} //背景色
+        backgroundColor={theme.themeColor} //背景色
         contentBackgroundColor={GlobalStyles.backgroundColor} //内容背景色
         parallaxHeaderHeight={PARALLAX_HEADER_HEIGHT} //内容高度
         stickyHeaderHeight={STICKY_HEADER_HEIGHT} //能上拉到的最小高度

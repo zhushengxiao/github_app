@@ -38,9 +38,11 @@ export default class AboutMePage extends Component {
     if (!tab) {
       return;
     }
+    const {theme} = this.params;
     if (tab.url) {
       NavigationUtil.goPage(
         {
+          theme,
           title: tab.title,
           url: tab.url,
         },
@@ -76,6 +78,7 @@ export default class AboutMePage extends Component {
    * @param {*} key
    */
   _item(data, isShow, key) {
+    const {theme} = this.params;
     return ViewUtil.getSettingItem(
       () => {
         //点击cell的回调
@@ -84,7 +87,7 @@ export default class AboutMePage extends Component {
         });
       },
       data.name,
-      THEME_COLOR,
+      theme.themeColor,
       Ionicons,
       data.icon,
       isShow ? 'ios-arrow-down' : 'ios-arrow-forward'
@@ -102,6 +105,7 @@ export default class AboutMePage extends Component {
     if (!dic) {
       return null;
     }
+    const {theme} = this.params;
     let views = [];
     for (let i in dic) {
       let title = isShowAccount
@@ -112,7 +116,7 @@ export default class AboutMePage extends Component {
           {ViewUtil.getSettingItem(
             () => this.onClick(dic[i]),
             title,
-            THEME_COLOR
+            theme.themeColor
           )}
           <View style={GlobalStyles.line} />
         </View>

@@ -63,7 +63,11 @@ export default class AboutPage extends Component<Props> {
 
   getItem(menu) {
     const {theme} = this.params;
-    return ViewUtil.getMenuItem(() => this.onClick(menu), menu, THEME_COLOR);
+    return ViewUtil.getMenuItem(
+      () => this.onClick(menu),
+      menu,
+      theme.themeColor
+    );
   }
 
   render() {
