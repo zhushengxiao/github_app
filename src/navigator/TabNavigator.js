@@ -17,6 +17,8 @@ import NavigationUtil from '../navigator/NavigationUtil';
 import EventBus from 'react-native-event-bus';
 import EventTypes from '../utils/EventTypes';
 
+import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
+
 import {connect} from 'react-redux';
 
 const BottomTabbarNavigator = {

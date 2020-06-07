@@ -25,6 +25,8 @@ import BackPressComponent from '../../common/BackPressComponent';
 import GlobalStyles from '../../response/styles/GlobalStyles';
 import ViewUtil from '../../utils/ViewUtil';
 import Utils from '../../utils/Utils';
+import SafeAreaViewPlus from '../../common/SafeAreaViewPlus';
+
 const favoriteDao = new FavoriteDao(FLAG_STORAGE.flag_popular);
 
 const currentPageSize = 10; //设为常量，防止修改
@@ -274,13 +276,15 @@ class SearchView extends Component {
       </TouchableOpacity>
     ) : null;
     return (
-      <View style={GlobalStyles.root_container} topColor={theme.themeColor}>
+      <SafeAreaViewPlus
+        style={GlobalStyles.root_container}
+        topColor={theme.themeColor}>
         {statusBar}
         {this.renderNavBar()}
         {resultView}
         {bottomButton}
         <Toast ref={(toast) => (this.toast = toast)} />
-      </View>
+      </SafeAreaViewPlus>
     );
   }
 }

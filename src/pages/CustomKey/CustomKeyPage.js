@@ -11,6 +11,7 @@ import ViewUtil from '../../utils/ViewUtil';
 import CheckBox from 'react-native-check-box'; //复选框
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import ArrayUtil from '../../utils/ArrayUtil';
+import SafeAreaViewPlus from '../../common/SafeAreaViewPlus';
 
 const THEME_COLOR = '#678';
 
@@ -213,10 +214,10 @@ class CustomKeyPage extends Component {
       />
     );
     return (
-      <View style={styles.container} topColor={theme.themeColor}>
+      <SafeAreaViewPlus style={styles.container} topColor={theme.themeColor}>
         {navigationBar}
         <ScrollView>{this.renderView()}</ScrollView>
-      </View>
+      </SafeAreaViewPlus>
     );
   }
 }

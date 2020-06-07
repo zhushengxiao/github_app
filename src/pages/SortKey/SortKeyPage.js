@@ -14,6 +14,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import ArrayUtil from '../../utils/ArrayUtil';
 import SortableListView from 'react-native-sortable-listview-newer'; //可拖拽排序的flatlist
 import GlobalStyles from '../../response/styles/GlobalStyles';
+import SafeAreaViewPlus from '../../common/SafeAreaViewPlus';
 
 const THEME_COLOR = '#678';
 
@@ -177,7 +178,9 @@ class SortKeyPage extends Component<Props> {
     );
 
     return (
-      <View style={GlobalStyles.root_container} topColor={theme.themeColor}>
+      <SafeAreaViewPlus
+        style={GlobalStyles.root_container}
+        topColor={theme.themeColor}>
         {navigationBar}
         <SortableListView
           data={this.state.checkedArray}
@@ -193,7 +196,7 @@ class SortKeyPage extends Component<Props> {
           }}
           renderRow={(row) => <SortCell data={row} {...this.params} />}
         />
-      </View>
+      </SafeAreaViewPlus>
     );
   }
 }

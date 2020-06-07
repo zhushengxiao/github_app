@@ -8,6 +8,7 @@ import BackPressComponent from '../common/BackPressComponent';
 import NavigationUtil from '../navigator/NavigationUtil';
 import TabNavigater from '../navigator/TabNavigator';
 import CustomTheme from '../pages/CustomTheme/CustomTheme';
+import SafeAreaViewPlus from '../common/SafeAreaViewPlus';
 
 class HomePage extends Component {
   constructor(props) {
@@ -51,12 +52,13 @@ class HomePage extends Component {
   }
 
   render() {
+    const {theme} = this.props;
     NavigationUtil.navigation = this.props.navigation;
     return (
-      <View style={{flex: 1}}>
+      <SafeAreaViewPlus topColor={theme.themeColor}>
         <TabNavigater />
         {this.renderCustomThemeView()}
-      </View>
+      </SafeAreaViewPlus>
     );
   }
 }

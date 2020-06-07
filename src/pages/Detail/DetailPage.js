@@ -24,6 +24,7 @@ import WebView from 'react-native-webview';
 
 import BackPressComponent from '../../common/BackPressComponent';
 import FavoriteDao from '../../Dao/FavoriteDao';
+import SafeAreaViewPlus from '../../common/SafeAreaViewPlus';
 
 const TRENDING_URL = 'https://github.com/';
 const THEME_COLOR = '#678';
@@ -131,7 +132,7 @@ export default class DetailPage extends Component {
     );
 
     return (
-      <View>
+      <SafeAreaViewPlus topColor={theme.themeColor}>
         {navigationBar}
         <View style={{width: '100%', height: '100%'}}>
           <WebView
@@ -142,7 +143,7 @@ export default class DetailPage extends Component {
             // source={{ uri: "https://www.baidu.com" }}
           />
         </View>
-      </View>
+      </SafeAreaViewPlus>
     );
   }
 }
