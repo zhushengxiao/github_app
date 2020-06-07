@@ -25,6 +25,7 @@ import {
 } from './trending';
 import {onLoadFavoriteData} from './favorite';
 import {onLoadLanguage} from './language';
+import {onSearch, onLoadMoreSearch, onSearchCancel} from './search';
 
 export default {
   onThemeChange,
@@ -38,4 +39,7 @@ export default {
   onLoadLanguage,
   onThemeInit,
   onShowCustomThemeView,
+  onSearch,
+  onLoadMoreSearch,
+  onSearchCancel,
 };

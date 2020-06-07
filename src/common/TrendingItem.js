@@ -19,7 +19,8 @@ const {height, width} = Dimensions.get('window');
 
 export default class TrendingItem extends BaseItem {
   render() {
-    const {projectModel} = this.props;
+    const {projectModel, theme} = this.props;
+    console.log('tringItem--------->', theme);
     const {item} = projectModel;
     if (!item) {
       return null;

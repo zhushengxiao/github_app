@@ -16,6 +16,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {createAppContainer} from 'react-navigation';
 import {createMaterialTopTabNavigator} from 'react-navigation-tabs';
 import Toast from 'react-native-easy-toast';
+
 import NavigationBar from '../../common/NavigationBar';
 import EventBus from 'react-native-event-bus';
 import EventTypes from '../../utils/EventTypes';
@@ -50,11 +51,14 @@ class PopularPage extends Component<Props> {
   _genTabs() {
     const tabs = {};
     const {keys} = this.props; //topNavBar数据
-
+    const {theme} = this.props;
+    console.log('populat---->', theme);
     keys.forEach((item, index) => {
       if (item.checked) {
         tabs[`tab${index}`] = {
-          screen: (props) => <PopularTabPage {...props} tabLabel={item.name} />, //定义tab时给页面传递参数
+          screen: (props) => (
+            <PopularTabPage {...props} tabLabel={item.name} theme={theme} />
+          ), //定义tab时给页面传递参数
           navigationOptions: {
             title: item.name,
           },
@@ -64,11 +68,34 @@ class PopularPage extends Component<Props> {
     return tabs;
   }
 
+  //右上角搜索按钮
+  renderRightButton() {
+    const {theme} = this.props;
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          NavigationUtil.goPage({theme}, 'SearchPage');
+        }}>
+        <View style={{padding: 5, marginRight: 8}}>
+          <Ionicons
+            name={'ios-search'}
+            size={24}
+            style={{
+              marginRight: 8,
+              alignSelf: 'center',
+              color: 'white',
+            }}
+          />
+        </View>
+      </TouchableOpacity>
+    );
+  }
+
   render() {
-    const {keys} = this.props; //topNavBar数据
+    const {keys, theme} = this.props; //topNavBar数据
     //状态栏和navigationbar
     let statusBar = {
-      backgroundColor: THEME_COLOR,
+      backgroundColor: theme.themeColor,
       barStyle: 'light-content',
     };
 
@@ -76,7 +103,8 @@ class PopularPage extends Component<Props> {
       <NavigationBar
         title={'最热'}
         statusBar={statusBar}
-        style={{backgroundColor: THEME_COLOR}}
+        style={theme.styles.navBar}
+        rightButton={this.renderRightButton()}
       />
     );
 
@@ -110,6 +138,7 @@ class PopularPage extends Component<Props> {
 
 const mapPopularStateToProps = (state) => ({
   keys: state.language.keys, //topNavBar数据
+  theme: state.theme.theme,
 });
 const mapPopularDispatchToProps = (dispatch) => ({
   onLoadLanguage: (flag) => dispatch(actions.onLoadLanguage(flag)),
@@ -194,13 +223,16 @@ class PopularTab extends Component {
 
   renderItem(data) {
     const item = data.item;
+    const {theme} = this.props;
     // console.log('dataItem================>', data);
     return (
       <PopularItem
         projectModel={item}
+        theme={theme}
         onSelect={(callBack) => {
           NavigationUtil.goPage(
             {
+              theme,
               flag: FLAG_STORAGE.flag_popular,
               projectModel: item,
               callBack,

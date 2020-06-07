@@ -15,6 +15,7 @@ import AboutPage from '../pages/About/AboutPage';
 import AboutMePage from '../pages/About/AboutMePage';
 import CustomKeyPage from '../pages/CustomKey/CustomKeyPage';
 import SortKeyPage from '../pages/SortKey/SortKeyPage';
+import SearchPage from '../pages/Search/SearchPage';
 
 export const rootComponent = 'Init'; //设置根路由
 
@@ -66,6 +67,12 @@ const MainNavigator = createStackNavigator({
   },
   SortKeyPage: {
     screen: SortKeyPage,
+    navigationOptions: {
+      header: null,
+    },
+  },
+  SearchPage: {
+    screen: SearchPage,
     navigationOptions: {
       header: null,
     },

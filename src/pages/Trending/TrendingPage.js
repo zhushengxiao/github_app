@@ -57,7 +57,8 @@ class TrendingPage extends Component {
 
   _generateTopTabs() {
     const tabs = {};
-    const {keys} = this.props; //topNavbar数据
+    const {keys, theme} = this.props; //topNavbar数据
+
     this.preKeys = keys;
     keys.forEach((item, index) => {
       if (item.checked) {
@@ -67,6 +68,7 @@ class TrendingPage extends Component {
               {...props}
               timeSpan={this.state.timeSpan}
               tabLabel={item.name}
+              theme={theme}
             />
           ),
           navigationOptions: {
@@ -125,7 +127,12 @@ class TrendingPage extends Component {
   }
 
   _tabNav() {
-    if (!ArrayUtil.isEqual(this.preKeys, this.props.keys)) {
+    const {theme} = this.props;
+    if (
+      theme !== this.theme ||
+      !this.tabNav ||
+      !ArrayUtil.isEqual(this.preKeys, this.props.keys)
+    ) {
       this.TabTopNavigator = createAppContainer(
         createMaterialTopTabNavigator(this._generateTopTabs(), {
           tabBarOptions: {
@@ -133,7 +140,7 @@ class TrendingPage extends Component {
             upperCaseLabel: false,
             scrollEnabled: true,
             style: {
-              backgroundColor: '#678',
+              backgroundColor: theme.themeColor,
             },
             indicatorStyle: styles.indicatorStyle,
             labelStyle: styles.labelStyle,
@@ -147,16 +154,16 @@ class TrendingPage extends Component {
 
   render() {
     //状态栏和navigationbar
-    const {keys} = this.props; //topNavbar数据
+    const {keys, theme} = this.props; //topNavbar数据
     let statusBar = {
-      backgroundColor: '#2f54eb',
+      backgroundColor: theme.themeColor,
       barStyle: 'light-content',
     };
     let navigationBar = (
       <NavigationBar
         titleView={this.renderTitleView()}
         statusBar={statusBar}
-        style={{backgroundColor: THEME_COLOR}}
+        style={theme.styles.navBar}
       />
     );
 
@@ -176,6 +183,7 @@ class TrendingPage extends Component {
 
 const mapTrendingStateToProps = (state) => ({
   keys: state.language.languages, //topNavBar数据
+  theme: state.theme.theme,
 });
 const mapTrendingDispatchToProps = (dispatch) => ({
   onLoadLanguage: (flag) => dispatch(actions.onLoadLanguage(flag)),
@@ -283,12 +291,16 @@ class TrendingTab extends Component {
 
   renderItem(data) {
     const item = data.item;
+    const {theme} = this.props;
+    // console.log('tringtheme---->', theme);
     return (
       <TrendingItem
         projectModel={item}
+        theme={theme}
         onSelect={(callBack) => {
           NavigationUtil.goPage(
             {
+              theme,
               projectModel: item,
               flag: FLAG_STORAGE.flag_trending,
               callBack,
